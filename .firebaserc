@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "tharani-a-traders",
+    "staging": "chat-app-7deb2"
+  },
+  "targets": {},
+  "etags": {}
+}

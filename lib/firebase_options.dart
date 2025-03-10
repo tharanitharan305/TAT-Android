@@ -50,6 +50,7 @@ class DefaultFirebaseOptions {
     projectId: 'tharani-a-traders',
     authDomain: 'tharani-a-traders.firebaseapp.com',
     storageBucket: 'tharani-a-traders.appspot.com',
+    measurementId: 'G-741KFK5K7M',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
