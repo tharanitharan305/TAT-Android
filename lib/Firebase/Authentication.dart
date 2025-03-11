@@ -171,6 +171,9 @@ class _AuthenticationState extends State<Authentication> {
                                 _email = newValue!;
                               },
                             ),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             TextFormField(
                               decoration: const InputDecoration(
                                   label: Text('Password')),

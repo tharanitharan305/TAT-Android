@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart' as fire;
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -21,6 +22,7 @@ class FirebaseBloc extends Bloc<FirebaseEvent, FirebaseState> {
     on<AddOrderToFirebaseEvent>(_onAddOrderToFirebaseEvent);
     on<OnUserEntersEvent>(_onUserEnterEvent);
     on<GetOrderFromFireBase>(_onGetOrderOnFirebase);
+
   }
   _onAddOrderToFirebaseEvent(
       AddOrderToFirebaseEvent event, Emitter<FirebaseState> emit) async {
@@ -32,7 +34,8 @@ class FirebaseBloc extends Bloc<FirebaseEvent, FirebaseState> {
           .doc(event.order.uid)
           .set(event.order.toMap());
     } catch (e) {
-      emit(FirebaseError(message: e.toString()));
+      log("Error caused in AddOrderToFirebase method in firebase bloc${e.toString()}");
+      emit(FirebaseOrderUploadError(message: e.toString()));
       return;
     }
     log("Sucess");
@@ -82,5 +85,22 @@ class FirebaseBloc extends Bloc<FirebaseEvent, FirebaseState> {
       emit(FirebaseError(message: e.toString()));
       log("emitted the error $e");
     }
+  }
+  _OnCreateAccountEvent(CreateAccountEvent event,Emitter<FirebaseState> emit) async {
+    emit(FirebaseLoading());
+    try{
+      final user=await FirebaseAuth.instance.createUserWithEmailAndPassword(email: event.user.userEmail, password: event.password);
+      await store.collection('Employees').doc(event.user.userName).set({'UserName': event.user.userName,
+          'email': event.user.userEmail,
+          "Sales": event.user.overAllSales,
+          "Days of Present": event.user.daysOfPresent,
+          "Job": event.user.jobType,
+          "Lat": 0,
+          "Long": 0
+      });
+    }catch(e){
+      emit(FirebaseError(message: e.toString()));
+    }
+    emit(FirebaseUserSucess(user: event.user));
   }
 }

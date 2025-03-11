@@ -19,3 +19,11 @@ class FirebaseGotOrders extends FirebaseState {
   List<FirebaseOrder> order;
   FirebaseGotOrders({required this.order});
 }
+class FirebaseUserSucess extends FirebaseState{
+  TatUser user;
+  FirebaseUserSucess({required this.user});
+}
+class FirebaseOrderUploadError extends FirebaseState{
+  String message;
+  FirebaseOrderUploadError({required this.message});
+}

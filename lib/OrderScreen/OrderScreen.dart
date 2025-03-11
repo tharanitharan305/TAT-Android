@@ -49,6 +49,7 @@ class _OrderScreenState extends State<OrderScreen> {
     Shop shop,
     String location,
   ) {
+    log("In Order upload to Firebase");
     context.read<OrderBloc>().add(OrderSubmitEvent(
         location: location, shop: shop, orders: orders, context: context));
     Navigator.pop(context);

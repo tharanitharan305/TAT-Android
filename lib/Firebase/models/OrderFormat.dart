@@ -24,15 +24,21 @@ class FirebaseOrder {
     required this.date,
   }); // Converting to List<Map>
   Map<String, dynamic> toMap() {
-    return {
-      "User": user.toMap(),
+    log("Generating Map From Firebase Orders");
+    Map<String ,dynamic> map={"User": user.toMap(),
       "Beat": beat,
       "Uid": uid,
       "Total": total,
       "Shop": shop.toMap(),
-      "Orders": orders,
-      "Date": date
-    };
+      "Orders": orders.map((e) => e.toMap(),).toList(),
+      "Date": date};
+    return {"User": user.toMap(),
+      "Beat": beat,
+      "Uid": uid,
+      "Total": total,
+      "Shop": shop.toMap(),
+      "Orders": orders.map((e) => e.toMap(),).toList(),
+      "Date": date};
   }
 
   factory FirebaseOrder.fromMap(Map<String, dynamic> map) {

@@ -37,7 +37,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         log("order sucerr");
         add(OrderAddedSucessEvent());
       }
-      if (state is FirebaseError) {
+      if (state is FirebaseOrderUploadError) {
         add(OrderFailedEvent(message: state.message));
       }
       log(state.toString());
@@ -62,7 +62,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   _onUpdateOrderSet(UpdateOrderList event, Emitter emit) {
     emit(OrderLoading());
     log(overAllList.length.toString());
-    order_set = overAllList[event.company]!;
+    order_set = List.from(overAllList[event.company]!);
     if (ordered_set.isNotEmpty) {
       log("adding list");
       for (int i = 0; i < ordered_set.length; i++) {
@@ -102,6 +102,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   _onOrderSubmitEvent(OrderSubmitEvent event, Emitter<OrderState> emit) {
     emit(OrderLoading());
+    log("In OrderBloc : Started OrderSubmit Event SucessFully");
     FirebaseOrder order;
     double _total = 0.0;
     // List<Map<String, dynamic>> orderMap = [];
@@ -110,6 +111,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     //   Map<String, dynamic> map = event.orders[i].toMap();
     //   orderMap.add(map);
     // }
+
     order = FirebaseOrder(
         user: event.context.read<FirebaseBloc>().user!,
         orders: event.orders,
@@ -118,7 +120,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         total: _total,
         uid: const Uuid().v4(),
         date: DateTimeTat().GetDate());
-    log(_total.toString());
+    log("In OrderBloc:Orders ParsedInto FirebaseOrder Sucessfully and now sending the object to Firebase blod");
     event.context
         .read<FirebaseBloc>()
         .add(AddOrderToFirebaseEvent(order: order));
@@ -128,6 +130,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       OrderAddedSucessEvent event, Emitter<OrderState> emit) {
     ordered_set.clear();
     order_set.clear();
+    log("In OrderBloc:Ordered_set and Order_set were cleared sucessfully");
     emit(OrderSucessOnFire());
   }
 

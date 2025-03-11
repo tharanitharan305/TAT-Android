@@ -24,6 +24,8 @@
         </intent>
     </queries>
     <application
+        android:hardwareAccelerated="true"
+        android:usesCleartextTraffic="true"
         android:label="tat"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
