@@ -1,0 +1,2 @@
+E:/git-projects/TAT-ANDROID/TAT-Android/android/app/.cxx/RelWithDebInfo/54316v5k/x86_64/CMakeFiles/edit_cache.dir
+E:/git-projects/TAT-ANDROID/TAT-Android/android/app/.cxx/RelWithDebInfo/54316v5k/x86_64/CMakeFiles/rebuild_cache.dir

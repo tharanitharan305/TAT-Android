@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tat/Products/Widgets/Product_Getter.dart';
 import 'package:tat/Widgets/AddCompany.dart';
 import 'package:tat/Widgets/AddLocation.dart';
 import 'package:tat/Widgets/ShopGetter.dart';
@@ -13,7 +14,7 @@ class GetNew extends StatefulWidget {
 
 class _GetNew extends State<GetNew> {
   void ADD() {
-    Get.to(() => Add());
+    Get.to(() => ProductGetter());
   }
 
   void ShopAdd() {

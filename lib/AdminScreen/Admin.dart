@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart' as cloud;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:tat/AdminScreen/bloc/AdminBloc.dart';
 import 'package:tat/Firebase/bloc/FirebaseBloc.dart';
@@ -312,8 +313,10 @@ class _AdminScreen extends State<AdminScreen> {
       if (state is OrderLoading) {
         return buildUi(
             null,
-            const Center(
-              child: CircularProgressIndicator(),
+             const Center(
+              child: SpinKitThreeBounce(color: Colors.amber,
+              size: 20,
+            ),
             ));
       }
       if (state is OrderGotSucess) {

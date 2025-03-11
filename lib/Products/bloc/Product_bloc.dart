@@ -124,6 +124,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     } catch (e) {
       emit(ProductError(message: e.toString()));
     }
+    dev.log("In ProductBloc: ProductFetch Sucess for ${event.company} With ${product_list.length} ");
     emit(ProductListReady(product_list: product_list));
   }
 

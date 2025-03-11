@@ -4,8 +4,10 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tat/Beat/bloc/BeatBloc.dart' as beat;
 import 'package:tat/Firebase/NewOrder.dart';
 import 'package:tat/Firebase/bloc/FirebaseBloc.dart';
@@ -83,91 +85,94 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           children: [
             Text(order.product.productName),
-            Row(
-              children: [
-                Text("S.P: ${order.product.sPrice.toString()}, "),
-                Text("MRP:${order.product.mrp.toString()}, "),
-                Text("FREE: ${order.free.toInt()}, "),
-                if (order.qty > 0)
-                  Text("Dis: ${order.product.discound.toInt()}, "),
-                Flexible(child: Text("QTY: ${order.qty}")),
-                if (order.qty > 0)
-                  IconButton(
-                      onPressed: () {
-                        final freeController =
-                            TextEditingController(text: 0.toString());
-                        final spController = TextEditingController(
-                            text: order.product.sPrice.toString());
-                        double discont() =>
-                            ((double.parse(spController.value.text) -
-                                    order.product.sPrice) /
-                                order.product.sPrice) *
-                            100;
-                        showDialog(
-                          barrierDismissible: true,
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              content: SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.20,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "FREE"),
-                                      controller: freeController,
-                                      keyboardType: TextInputType.number,
-                                    ),
-                                    TextField(
-                                      decoration: const InputDecoration(
-                                          hintText: "Selling Price"),
-                                      controller: spController,
-                                      keyboardType: TextInputType.number,
-                                    ),
-                                    Text(
-                                        "DISCOUND: ${(discont() * -1).toInt()}%")
-                                  ],
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  Text("S.P: ${order.product.sPrice.toString()}, "),
+                  Text("MRP:${order.product.mrp.toString()}, "),
+                  Text("FREE: ${order.free.toInt()}, "),
+                  if (order.qty > 0)
+                    Text("Dis: ${order.product.discound.toInt()}, "),
+                  Text("QTY: ${order.qty}"),
+                  if (order.qty > 0)
+                    IconButton(
+                        onPressed: () {
+                          final freeController =
+                              TextEditingController(text: 0.toString());
+                          final spController = TextEditingController(
+                              text: order.product.sPrice.toString());
+                          double discont() =>
+                              ((double.parse(spController.value.text) -
+                                      order.product.sPrice) /
+                                  order.product.sPrice) *
+                              100;
+                          showDialog(
+                            barrierDismissible: true,
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.20,
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      TextField(
+                                        decoration: const InputDecoration(
+                                            hintText: "FREE"),
+                                        controller: freeController,
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                      TextField(
+                                        decoration: const InputDecoration(
+                                            hintText: "Selling Price"),
+                                        controller: spController,
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                      Text(
+                                          "DISCOUND: ${(discont() * -1).toInt()}%")
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      final sp =
-                                          double.parse(spController.value.text);
-                                      final free = double.parse(
-                                          freeController.value.text);
-                                      if (sp > 0 &&
-                                          order.product.sPrice != sp) {
-                                        context.read<OrderBloc>().add(
-                                            UpdateSellingPriceEvent(
-                                                product: order,
-                                                sp: sp,
-                                                dis: discont()));
-                                      }
-                                      if (free > 0 && order.free != free) {
-                                        context.read<OrderBloc>().add(
-                                            UpdateFreeEvent(
-                                                product: order, free: free));
-                                      }
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        final sp =
+                                            double.parse(spController.value.text);
+                                        final free = double.parse(
+                                            freeController.value.text);
+                                        if (sp > 0 &&
+                                            order.product.sPrice != sp) {
+                                          context.read<OrderBloc>().add(
+                                              UpdateSellingPriceEvent(
+                                                  product: order,
+                                                  sp: sp,
+                                                  dis: discont()));
+                                        }
+                                        if (free > 0 && order.free != free) {
+                                          context.read<OrderBloc>().add(
+                                              UpdateFreeEvent(
+                                                  product: order, free: free));
+                                        }
 
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("change")),
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("cancel"))
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      icon: const Icon(Icons.change_circle_rounded)),
-              ],
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("change")),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("cancel"))
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.change_circle_rounded)),
+                ],
+              ),
             ),
             TextField(
               controller: order.qtyController,
@@ -238,7 +243,10 @@ class _OrderScreenState extends State<OrderScreen> {
       builder: (context, state) {
         final bloc = context.read<ShopBloc>();
         if (state is ShopLoading) {
-          return CircularProgressIndicator();
+          return SpinKitThreeBounce(
+            color: Colors.amber,
+            size: 20,
+          );
         } else if (state is ShopLoadComplete) {
           log(bloc.shop_List.length.toString());
           return DropdownTatShop(

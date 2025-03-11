@@ -235,7 +235,7 @@
 import 'package:flutter/material.dart';
 import 'package:tat/AdminScreen/Admin.dart';
 import 'package:tat/OrderScreen/OrderScreen.dart';
-import 'package:tat/Screens/ProductScreen.dart';
+import 'package:tat/Products/Widgets/ProductScreen.dart';
 import 'package:tat/Screens/ShopScreen.dart';
 import 'package:tat/Screens/getNew.dart';
 import 'package:tat/Widgets/UserDrawer.dart';
