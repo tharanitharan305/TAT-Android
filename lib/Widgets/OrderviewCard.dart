@@ -102,40 +102,41 @@ class OrderViewCard extends StatelessWidget {
                 IconButton(onPressed: delete, icon: Icon(Icons.delete_rounded))
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
-            DataTable(columns: [
-              DataColumn(label: Text("Name")),
-              DataColumn(label: Text("S.P")),
-              DataColumn(label: Text("Quantity")),
-              DataColumn(label: Text("FREE")),
-            ], rows: [
-              ...items.map((e) => DataRow(cells: [
-                    DataCell(Text(
-                      e.product.productName,
-                      style:
-                          TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-                    )),
-                    DataCell(Text(e.product.sPrice.toString())),
-                    DataCell(Text(e.qty.toString())),
-                    DataCell(Text(e.free.toString())),
-                  ]))
-            ]),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(columns: const [
+                DataColumn(label: Text("Name")),
+                DataColumn(label: Text("s.p")),
+                DataColumn(label: Text("Quantity")),
+                DataColumn(label: Text("FREE")),
+                DataColumn(label: Text("MRP")),
+                DataColumn(label: Text("Discound")),
+              ], rows: [
+                ...items.map((e) => DataRow(cells: [
+                      DataCell(Text(
+                        e.product.productName,
+                        style:
+                            TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                      )),
+                      DataCell(Text(e.product.sPrice.toString())),
+                      DataCell(Text(e.qty.toString())),
+                      DataCell(Text(e.free.toString())),
+                      DataCell(Text(e.product.mrp.toString())),
+                      DataCell(Text(e.product.discound.toString()+"%")),
+                    ]))
+              ]),
+            ),
             SizedBox(
               height: 15,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton.icon(
-                    onPressed: () {
-                      _sendMessage();
-                    },
-                    label: Text("Send Sms"),
-                    icon: Icon(Icons.message_rounded)),
                 Spacer(),
-                Text(
+                const Text(
                   "Time:",
                   style: TextStyle(fontSize: 10),
                 ),

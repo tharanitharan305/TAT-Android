@@ -286,6 +286,7 @@ class _AdminScreen extends State<AdminScreen> {
                 set: Time.toSet(),
                 onChanged: (value) {
                   context.read<AdminBloc>().add(UpdateDateEvent(date: value!));
+                  context.read<AdminBloc>().add(FetchListOfOrdersEvent(beat: context.read<BeatBloc>().beat,));
                   setState(() {});
                 }),
           )

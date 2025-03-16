@@ -294,7 +294,7 @@ class NewOrder {
   // }
   void live() async {
     final userName = user.displayName;
-    final location = await getcurrentLocation();
+    final location = await getcurrentLocation(null);
     final lat = location[7];
     final long = location[8];
     await getPermission();

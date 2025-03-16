@@ -44,6 +44,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
   }
   _onUpdateDateEvent(UpdateDateEvent event, Emitter<AdminState> emit) {
     date = event.date;
+    //AdminBloc(firebaseBloc: firebaseBloc).add(FetchListOfOrdersEvent(beat: ))
   }
 
   _onFetchOrderFromFirebaseEvent(

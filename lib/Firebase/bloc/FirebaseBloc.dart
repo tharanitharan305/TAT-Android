@@ -55,10 +55,10 @@ class FirebaseBloc extends Bloc<FirebaseEvent, FirebaseState> {
     List<FirebaseOrder> orders = [];
     try {
       log("getting form store for beat:${event.beat}");
-      final list = await store.collection(event.beat).get();
+      final list = await store.collection(event.beat).where('Date',isEqualTo: event.date).get();
       final fireDoc = list.docs;
       if (fireDoc.isEmpty) {
-        throw Exception("No Orders in the Beat ${event.beat}");
+        throw Exception("No Orders in the Beat ${event.beat} at Date ${event.date} ");
       }
       log("NO of Orders: ${fireDoc.length}");
 

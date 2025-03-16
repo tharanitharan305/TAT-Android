@@ -247,11 +247,11 @@ class _OrderScreenState extends State<OrderScreen> {
             color: Colors.amber,
             size: 20,
           );
-        } else if (state is ShopLoadComplete) {
-          log(bloc.shop_List.length.toString());
+        } else if (state is ShopFetchSuccess) {
+          log(bloc.shopList.length.toString());
           return DropdownTatShop(
               dropdownValue: bloc.shopName,
-              set: bloc.shop_List,
+              set: bloc.shopList,
               onChanged: (value) {
                 bloc.add(UpdateShopEvent(shop: value!));
                 setState(() {});
@@ -371,7 +371,7 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   getLocatoion() => context.read<beat.BeatBloc>().beat;
-  getShopBloc() => context.read<ShopBloc>().shop;
+  getShopBloc() => context.read<ShopBloc>().selectedShop;
   getOdredList() => context.read<OrderBloc>().ordered_set;
   Widget build(context) {
     //final bloc = context.read<OrderBloc>();

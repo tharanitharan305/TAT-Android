@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer' as dev;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:lottie/lottie.dart';
 import 'package:tat/Beat/Areas.dart';
 import 'package:uuid/uuid.dart';
@@ -23,6 +24,7 @@ final user = FirebaseAuth.instance.currentUser!;
 
 class _ShopGetterState extends State<ShopGetter> {
   var geolocator;
+  bool showMap=false;
   String street = "";
   String area = "";
   String district = "";
@@ -46,9 +48,17 @@ class _ShopGetterState extends State<ShopGetter> {
       locations = temploc;
     });
   }
-
-  Future<void> locationSetup() async {
-    var add = await getcurrentLocation();
+setup(lat,lng){
+    dev.log("in ShopGetter updating the lat=${lat.toString()} long=${lng.toString()}");
+    setState(() {
+      latitude=lat.toString();
+      longitude=lng.toString();
+    });
+    locationSetup(LatLng(double.parse(latitude), double.parse(longitude)));
+}
+  Future<void> locationSetup(LatLng? loc) async {
+    var add;
+    loc==null?add = await getcurrentLocation(null):add=await getcurrentLocation(loc);
     setState(() {
       geolocator = add.split(",");
       street = geolocator[0] + "," + geolocator[1];
@@ -61,16 +71,19 @@ class _ShopGetterState extends State<ShopGetter> {
       longitude = geolocator[8];
     });
   }
-
+mapBox(){
+    dev.log(latitude+" "+longitude);
+ return SizedBox(height:500,width:500,child: MapBox( lat: double.parse(latitude), lng: double.parse(longitude), setup: setup,));
+}
   Future<void> AddShop() async {
-    await locationSetup();
+    await locationSetup(null);
     String uid = uuid.v4();
     if (key.currentState!.validate()) {
       key.currentState!.save();
       try {
         Get.snackbar("Adding shop..", "${Shopname} is been Adding ",
             duration: Duration(seconds: 5),
-            icon: Icon(
+            icon: const Icon(
               Icons.cloud_upload_rounded,
               color: Colors.yellowAccent,
             ));
@@ -99,7 +112,7 @@ class _ShopGetterState extends State<ShopGetter> {
         });
         Get.snackbar("Sucess", "$Shopname Added to TAT Sucessfully",
             duration: Duration(seconds: 5),
-            icon: Icon(
+            icon: const Icon(
               Icons.done_outline_rounded,
               color: Colors.greenAccent,
             ));
@@ -107,7 +120,7 @@ class _ShopGetterState extends State<ShopGetter> {
       } catch (e) {
         Get.snackbar("Fail", "$Shopname not Added ",
             duration: Duration(seconds: 5),
-            icon: Icon(
+            icon: const Icon(
               Icons.warning,
               color: Colors.redAccent,
             ));
@@ -121,6 +134,7 @@ class _ShopGetterState extends State<ShopGetter> {
     super.initState();
     //Get.dialog(Center(child: Lottie.asset("animations/back2.json")));
     SetLocation();
+    locationSetup(null);
     //Get.back();
   }
 
@@ -135,88 +149,101 @@ class _ShopGetterState extends State<ShopGetter> {
           width: double.infinity,
           child: Form(
             key: key,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // if (widget.Status == "p")
-                DropdownButton(
-                    elevation: 50,
-                    autofocus: true,
-                    dropdownColor:
-                        Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(20),
-                    value: Location,
-                    items: locations
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              key: UniqueKey(),
-                              child: Text(e),
-                            ))
-                        .toList(),
-                    onChanged: (values) {
-                      setState(() {
-                        Location = values!;
-                      });
-                    }),
-                if (Location != "--select--")
-                  TextFormField(
-                    decoration: InputDecoration(labelText: "Shop Name"),
-                    validator: (value) {
-                      if (value!.isEmpty || value.length < 3)
-                        return "Enter a valid shopname";
-                    },
-                    onChanged: (values) {
-                      setState(() {
-                        Shopname = values!;
-                      });
-                    },
-                    onSaved: (values) {
-                      setState(() {
-                        Shopname = values!;
-                      });
-                    },
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // if (widget.Status == "p")
+                  DropdownButton(
+                      elevation: 50,
+                      autofocus: true,
+                      dropdownColor:
+                          Theme.of(context).colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(20),
+                      value: Location,
+                      items: locations
+                          .map((e) => DropdownMenuItem(
+                                value: e,
+                                key: UniqueKey(),
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      onChanged: (values) {
+                        setState(() {
+                          Location = values!;
+                        });
+                      }),
+                  if (Location != "--select--")
+                    TextFormField(
+                      decoration: InputDecoration(labelText: "Shop Name"),
+                      validator: (value) {
+                        if (value!.isEmpty || value.length < 3)
+                          return "Enter a valid shopname";
+                      },
+                      onChanged: (values) {
+                        setState(() {
+                          Shopname = values!;
+                        });
+                      },
+                      onSaved: (values) {
+                        setState(() {
+                          Shopname = values!;
+                        });
+                      },
+                    ),
+                  SizedBox(height: 10,),
+                  if (Location != "--select--")
+                    TextFormField(
+                      decoration: InputDecoration(labelText: "Phone Number"),
+                      validator: (value) {
+                        if (value!.isEmpty || value.length != 10)
+                          return "Enter a valid phone number";
+                      },
+                      onChanged: (values) {
+                        setState(() {
+                          phoneNumber = values!;
+                        });
+                      },
+                      onSaved: (values) {
+                        setState(() {
+                          phoneNumber = values!;
+                        });
+                      },
+                    ),
+                  const SizedBox(
+                    height: 5,
                   ),
-                if (Location != "--select--")
-                  TextFormField(
-                    decoration: InputDecoration(labelText: "Phone Number"),
-                    validator: (value) {
-                      if (value!.isEmpty || value.length != 10)
-                        return "Enter a valid shopname";
-                    },
-                    onChanged: (values) {
-                      setState(() {
-                        phoneNumber = values!;
-                      });
-                    },
-                    onSaved: (values) {
-                      setState(() {
-                        phoneNumber = values!;
-                      });
-                    },
-                  ),
-                SizedBox(
-                  height: 20,
-                ),
-                if (Shopname != null &&
-                    !Shopname.isEmpty &&
-                    Shopname.length >= 5)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      if (uploadStatus) SplashScreen(),
-                      if (!uploadStatus)
-                        ElevatedButton(
-                          onPressed: AddShop,
-                          child: Text('Upload'),
-                          style: ElevatedButton.styleFrom(
-                              elevation: 10,
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer),
-                        )
-                    ],
-                  )
-              ],
+                  if (Location != "--select--")
+                    IconButton(onPressed: (){setState(() {
+                      showMap=!showMap;
+                    });}, icon: showMap?Icon(Icons.location_off):Icon(Icons.location_on)),
+                  if(showMap)mapBox(),
+                  Text(street), const SizedBox(
+                    height: 5,
+                  ),Text(area), const SizedBox(
+                    height: 5,
+                  ),Text(pin),
+                  if (Shopname != null &&
+                      !Shopname.isEmpty &&
+                      Shopname.length >= 5)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (uploadStatus) SplashScreen(),
+                        if (!uploadStatus)
+                          ElevatedButton(
+                            onPressed: AddShop,
+                            child: Text('Upload'),
+                            style: ElevatedButton.styleFrom(
+                                elevation: 10,
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer),
+                          )
+                      ],
+                    )
+                ],
+              ),
             ),
           ),
         ),

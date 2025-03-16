@@ -1,13 +1,11 @@
 {
   "hosting": {
-    "source": ".",
+    "site": "tharani-a-traders",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "asia-east1"
-    }
+    ]
   }
 }
