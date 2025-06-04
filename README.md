@@ -1,6 +1,7 @@
 TAT
 
 Mobile Application using Flutter, Firebase and Bloc
+
 Application for my family's instant wholesale grocery shop bills are generated faster and track the total value of it for a week with many divisions. An HTML website to get the details of the grocery dealer and also to get the recent version of the TAT application.
 
 App Demo link: https://drive.google.com/file/d/118cA9_uiV4DiFfnh6k8Cwf8Ge4Omz-9E/view?usp=sharing
